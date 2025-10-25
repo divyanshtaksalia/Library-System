@@ -1,9 +1,8 @@
 const usersContainer = document.getElementById('usersList');
 
-// फ़ंक्शन 1: सभी यूज़र्स को API से लोड करें
 async function loadUsers() {
     try {
-        const response = await fetch('http://localhost:3000/api/users');
+        const response = await fetch('/api/users');
         const data = await response.json();
 
         if (data.success) {
@@ -16,12 +15,11 @@ async function loadUsers() {
     }
 }
 
-// फ़ंक्शन 2: HTML में यूज़र्स को रेंडर करें
 function renderUsers(users) {
-    usersContainer.innerHTML = ''; 
+    usersContainer.innerHTML = '';
 
     if (users.length === 0) {
-        usersContainer.innerHTML = '<p>सिस्टम में कोई स्टूडेंट यूज़र नहीं है।</p>';
+        usersContainer.innerHTML = '<p>कोई छात्र उपयोगकर्ता नहीं मिला।</p>';
         return;
     }
 
@@ -32,8 +30,8 @@ function renderUsers(users) {
                     <th>ID</th>
                     <th>नाम</th>
                     <th>ईमेल</th>
-                    <th>स्टेटस</th>
-                    <th>एक्शन</th>
+                    <th>स्थिति</th>
+                    <th>कार्रवाई</th>
                 </tr>
             </thead>
             <tbody>
@@ -70,7 +68,6 @@ function renderUsers(users) {
     setupStatusToggleListeners();
 }
 
-// फ़ंक्शन 3: स्टेटस बदलने का लॉजिक
 function setupStatusToggleListeners() {
     usersContainer.addEventListener('click', async (e) => {
         if (e.target.classList.contains('btn-toggle-status')) {
@@ -78,20 +75,20 @@ function setupStatusToggleListeners() {
             const newStatus = e.target.dataset.status;
 
             try {
-                const response = await fetch('http://localhost:3000/api/users/status', {
+                const response = await fetch('/api/users/status', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ userId: userId, status: newStatus })
                 });
-                
+
                 const data = await response.json();
                 alert(data.message);
-                
+
                 if (data.success) {
-                    loadUsers(); // लिस्ट रीलोड करें
+                    loadUsers();
                 }
             } catch (error) {
-                alert('स्टेटस अपडेट करने में नेटवर्क त्रुटि।');
+                alert('स्टेटस अपडेट करते समय नेटवर्क त्रुटि।');
             }
         }
     });
