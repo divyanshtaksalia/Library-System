@@ -6,7 +6,7 @@ async function loadMyOrders() {
     if (!userId) return;
 
     try {
-        const response = await fetch(`http://localhost:3000/api/my-orders/${userId}`);
+        const response = await fetch(`https://library-system-ovrx.onrender.com/api/my-orders/${userId}`);
         const data = await response.json();
 
         if (data.success) {
@@ -70,7 +70,7 @@ ordersContainer.addEventListener('click', async (e) => {
         }
 
         try {
-            const response = await fetch('http://localhost:3000/api/request-return', {
+            const response = await fetch('https://library-system-ovrx.onrender.com/api/request-return', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ issueId: issueId })

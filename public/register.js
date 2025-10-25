@@ -12,7 +12,7 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
     messageElement.textContent = '';
 
     try {
-        const response = await fetch('http://localhost:3000/api/register', {
+        const response = await fetch('https://library-system-ovrx.onrender.com/api/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

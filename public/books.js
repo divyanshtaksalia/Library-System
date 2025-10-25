@@ -7,7 +7,7 @@ const usersList = document.getElementById('usersList');
 async function loadUsers() {
     if (!usersList) return;
     try {
-        const response = await fetch('/api/users');
+        const response = await fetch('https://library-system-ovrx.onrender.com/api/users');
         const data = await response.json();
         if (data.success) {
             renderUsers(data.users);
@@ -81,7 +81,7 @@ function setupUserStatusListeners() {
             }
 
             try {
-                const response = await fetch('/api/users/status', {
+                const response = await fetch('https://library-system-ovrx.onrender.com/api/users/status', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ userId: userId, status: newStatus })
@@ -100,7 +100,7 @@ function setupUserStatusListeners() {
 
 async function loadBooks(showAdminTools = false) {
     try {
-        const response = await fetch('/api/books');
+        const response = await fetch('https://library-system-ovrx.onrender.com/api/books');
         const data = await response.json();
         if (data.success) {
             renderBooks(data.books, showAdminTools);
@@ -157,7 +157,7 @@ function setupDeleteListeners() {
             }
 
             try {
-                const response = await fetch(`/api/books/${bookId}`, { method: 'DELETE' });
+                const response = await fetch(`https://library-system-ovrx.onrender.com/api/books/${bookId}`, { method: 'DELETE' });
                 const data = await response.json();
                 alert(data.message);
                 if (data.success) {
@@ -186,7 +186,7 @@ function setupIssueListeners() {
             }
 
             try {
-                const response = await fetch('/api/issue-book', {
+                const response = await fetch('https://library-system-ovrx.onrender.com/api/issue-book', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ userId: userId, bookId: bookId })
@@ -211,7 +211,7 @@ function setupIssueListeners() {
 async function loadReturnRequests() {
     if (!returnRequestsList) return;
     try {
-        const response = await fetch('/api/return-requests');
+        const response = await fetch('https://library-system-ovrx.onrender.com/api/return-requests');
         const data = await response.json();
         if (data.success) {
             renderReturnRequests(data.requests);
@@ -273,7 +273,7 @@ function setupReturnRequestListeners() {
             }
 
             try {
-                const response = await fetch('/api/handle-return', {
+                const response = await fetch('https://library-system-ovrx.onrender.com/api/handle-return', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ issueId, bookId, action })
@@ -303,7 +303,7 @@ if (addBookForm) {
         const category = document.getElementById('newCategory').value;
 
         try {
-            const response = await fetch('/api/books', {
+            const response = await fetch('https://library-system-ovrx.onrender.com/api/books', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ title, author, category })

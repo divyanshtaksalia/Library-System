@@ -47,7 +47,37 @@ app.get('/api/test-connection', (req, res) => {
 // ----------------------------------------------------
 // API Routes (रास्ते)
 // ----------------------------------------------------
+// 🔥 अस्थायी रूट: नया एडमिन बनाने के लिए (सुरक्षा के लिए इसे तुरंत हटा दें)
+app.get('/api/create-admin-one-time', async (req, res) => {
+    const adminEmail = 'new.admin@mylibrary.com'; // <--- नया ईमेल
+    const adminPassword = 'AdminPass2025'; // <--- नया पासवर्ड
+    const adminUsername = 'SystemAdmin';
 
+    try {
+        const hashedPassword = await bcrypt.hash(adminPassword, 10);
+        
+        // चेक करें कि यूज़र पहले से मौजूद तो नहीं है
+        const checkSql = 'SELECT user_id FROM users WHERE email = $1';
+        const existingUser = await pool.query(checkSql, [adminEmail]);
+
+        if (existingUser.rowCount > 0) {
+            return res.json({ success: false, message: 'एडमिन पहले से मौजूद है।' });
+        }
+        
+        // नया एडमिन रिकॉर्ड जोड़ें (role='admin' सेट करें)
+        const insertSql = 'INSERT INTO users (username, email, password_hash, role) VALUES ($1, $2, $3, $4)';
+        await pool.query(insertSql, [adminUsername, adminEmail, hashedPassword, 'admin']);
+        
+        res.json({ 
+            success: true, 
+            message: `नया एडमिन बनाया गया। ईमेल: ${adminEmail}, पासवर्ड: ${adminPassword}. **सुरक्षा के लिए इस रूट को जल्द ही हटा दें!**` 
+        });
+
+    } catch (error) {
+        console.error("Admin creation error:", error);
+        res.status(500).json({ success: false, message: 'एडमिन बनाने में त्रुटि।' });
+    }
+});
 // रजिस्ट्रेशन रूट
 app.post('/api/register', async (req, res) => {
     const { username, email, password } = req.body;

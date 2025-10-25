@@ -2,7 +2,7 @@ const usersContainer = document.getElementById('usersList');
 
 async function loadUsers() {
     try {
-        const response = await fetch('/api/users');
+        const response = await fetch('https://library-system-ovrx.onrender.com/api/users');
         const data = await response.json();
 
         if (data.success) {
@@ -75,7 +75,7 @@ function setupStatusToggleListeners() {
             const newStatus = e.target.dataset.status;
 
             try {
-                const response = await fetch('/api/users/status', {
+                const response = await fetch('https://library-system-ovrx.onrender.com/api/users/status', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ userId: userId, status: newStatus })
