@@ -1,0 +1,98 @@
+const usersContainer = document.getElementById('usersList');
+
+// फ़ंक्शन 1: सभी यूज़र्स को API से लोड करें
+async function loadUsers() {
+    try {
+        const response = await fetch('http://localhost:3000/api/users');
+        const data = await response.json();
+
+        if (data.success) {
+            renderUsers(data.users);
+        } else {
+            usersContainer.innerHTML = `<p class="error">${data.message}</p>`;
+        }
+    } catch (error) {
+        usersContainer.innerHTML = '<p class="error">यूज़र्स लोड नहीं हो सके।</p>';
+    }
+}
+
+// फ़ंक्शन 2: HTML में यूज़र्स को रेंडर करें
+function renderUsers(users) {
+    usersContainer.innerHTML = ''; 
+
+    if (users.length === 0) {
+        usersContainer.innerHTML = '<p>सिस्टम में कोई स्टूडेंट यूज़र नहीं है।</p>';
+        return;
+    }
+
+    const tableHtml = `
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>नाम</th>
+                    <th>ईमेल</th>
+                    <th>स्टेटस</th>
+                    <th>एक्शन</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${users.map(user => `
+                    <tr>
+                        <td>${user.user_id}</td>
+                        <td>${user.username}</td>
+                        <td>${user.email}</td>
+                        <td class="status-${user.account_status}">
+                            ${user.account_status === 'blocked' ? 'ब्लॉक' : 'सक्रिय'}
+                        </td>
+                        <td>
+                            <button data-id="${user.user_id}" 
+                                data-status="${user.account_status === 'active' ? 'blocked' : 'active'}"
+                                class="btn-toggle-status">
+                                ${user.account_status === 'active' ? 'ब्लॉक करें' : 'सक्रिय करें'}
+                            </button>
+                        </td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>
+        <style>
+            table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+            th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+            th { background-color: #f2f2f2; }
+            .status-blocked { color: red; font-weight: bold; }
+            .status-active { color: green; }
+            .btn-toggle-status { padding: 5px 10px; cursor: pointer; }
+        </style>
+    `;
+
+    usersContainer.innerHTML = tableHtml;
+    setupStatusToggleListeners();
+}
+
+// फ़ंक्शन 3: स्टेटस बदलने का लॉजिक
+function setupStatusToggleListeners() {
+    usersContainer.addEventListener('click', async (e) => {
+        if (e.target.classList.contains('btn-toggle-status')) {
+            const userId = e.target.dataset.id;
+            const newStatus = e.target.dataset.status;
+
+            try {
+                const response = await fetch('http://localhost:3000/api/users/status', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId: userId, status: newStatus })
+                });
+                
+                const data = await response.json();
+                alert(data.message);
+                
+                if (data.success) {
+                    loadUsers(); // लिस्ट रीलोड करें
+                }
+            } catch (error) {
+                alert('स्टेटस अपडेट करने में नेटवर्क त्रुटि।');
+            }
+        }
+    });
+}
