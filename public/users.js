@@ -11,7 +11,7 @@ async function loadUsers() {
             usersContainer.innerHTML = `<p class="error">${data.message}</p>`;
         }
     } catch (error) {
-        usersContainer.innerHTML = '<p class="error">यूज़र्स लोड नहीं हो सके।</p>';
+        usersContainer.innerHTML = '<p class="error">Network error: Unable to load users.</p>';
     }
 }
 
@@ -19,7 +19,7 @@ function renderUsers(users) {
     usersContainer.innerHTML = '';
 
     if (users.length === 0) {
-        usersContainer.innerHTML = '<p>कोई छात्र उपयोगकर्ता नहीं मिला।</p>';
+        usersContainer.innerHTML = '<p>No users found.</p>';
         return;
     }
 
@@ -28,10 +28,10 @@ function renderUsers(users) {
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>नाम</th>
-                    <th>ईमेल</th>
-                    <th>स्थिति</th>
-                    <th>कार्रवाई</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Status</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -41,13 +41,13 @@ function renderUsers(users) {
                         <td>${user.username}</td>
                         <td>${user.email}</td>
                         <td class="status-${user.account_status}">
-                            ${user.account_status === 'blocked' ? 'ब्लॉक' : 'सक्रिय'}
+                            ${user.account_status === 'blocked' ? 'Blocked' : 'Active'}
                         </td>
                         <td>
                             <button data-id="${user.user_id}" 
                                 data-status="${user.account_status === 'active' ? 'blocked' : 'active'}"
                                 class="btn-toggle-status">
-                                ${user.account_status === 'active' ? 'ब्लॉक करें' : 'सक्रिय करें'}
+                                ${user.account_status === 'active' ? 'Block' : 'Unblock'}
                             </button>
                         </td>
                     </tr>
@@ -88,7 +88,7 @@ function setupStatusToggleListeners() {
                     loadUsers();
                 }
             } catch (error) {
-                alert('स्टेटस अपडेट करते समय नेटवर्क त्रुटि।');
+                alert('Network error while updating status.');
             }
         }
     });

@@ -12,16 +12,16 @@ async function loadUsers() {
         if (data.success) {
             renderUsers(data.users);
         } else {
-            usersList.innerHTML = `<p class="error">यूज़र्स लोड करने में त्रुटि: ${data.message}</p>`;
+            usersList.innerHTML = `<p class="error">Error in loading users: ${data.message}</p>`;
         }
     } catch (error) {
-        usersList.innerHTML = '<p class="error">यूज़र्स लोड करने में नेटवर्क त्रुटि।</p>';
+        usersList.innerHTML = '<p class="error">Network error while loading users.</p>';
     }
 }
 
 function renderUsers(users) {
     if (users.length === 0) {
-        usersList.innerHTML = '<p>कोई छात्र उपयोगकर्ता नहीं मिला।</p>';
+        usersList.innerHTML = '<p>No student users found.</p>';
         return;
     }
 
@@ -30,10 +30,10 @@ function renderUsers(users) {
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>नाम</th>
-                    <th>ईमेल</th>
-                    <th>स्थिति</th>
-                    <th>कार्रवाई</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Status</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -43,7 +43,7 @@ function renderUsers(users) {
                         <td>${user.username}</td>
                         <td>${user.email}</td>
                         <td style="color: ${user.account_status === 'blocked' ? 'red' : 'green'}; font-weight: bold;">
-                            ${user.account_status === 'blocked' ? 'ब्लॉक' : 'सक्रिय'}
+                            ${user.account_status === 'blocked' ? 'Blocked' : 'Active'}
                         </td>
                         <td>
                             ${user.account_status === 'active' ? 
@@ -51,13 +51,13 @@ function renderUsers(users) {
                                     data-user-id="${user.user_id}" 
                                     data-status="blocked" 
                                     class="btn-status btn-block"
-                                    style="background-color: #dc3545; color: white;">ब्लॉक करें</button>` 
+                                    style="background-color: #dc3545; color: white;">Block</button>` 
                                 : 
                                 `<button 
                                     data-user-id="${user.user_id}" 
                                     data-status="active" 
                                     class="btn-status btn-activate"
-                                    style="background-color: #28a745; color: white;">सक्रिय करें</button>`
+                                    style="background-color: #28a745; color: white;">Activate</button>`
                             }
                         </td>
                     </tr>
@@ -74,9 +74,9 @@ function setupUserStatusListeners() {
         if (e.target.classList.contains('btn-status')) {
             const userId = e.target.dataset.userId;
             const newStatus = e.target.dataset.status;
-            const actionText = newStatus === 'blocked' ? 'ब्लॉक' : 'सक्रिय';
+            const actionText = newStatus === 'blocked' ? 'Block' : 'Activate';
 
-            if (!confirm(`क्या आप वाकई इस उपयोगकर्ता को ${actionText} करना चाहते हैं?`)) {
+            if (!confirm(`Are you sure you want to ${actionText} this user?`)) {
                 return;
             }
 
@@ -92,7 +92,7 @@ function setupUserStatusListeners() {
                     loadUsers();
                 }
             } catch (error) {
-                alert('यूज़र स्टेटस अपडेट करते समय नेटवर्क त्रुटि।');
+                alert('Network error while updating user status.');
             }
         }
     });
@@ -108,14 +108,14 @@ async function loadBooks(showAdminTools = false) {
             booksContainer.innerHTML = `<p class="error">${data.message}</p>`;
         }
     } catch (error) {
-        booksContainer.innerHTML = '<p class="error">सर्वर से किताबें लोड नहीं की जा सकीं।</p>';
+        booksContainer.innerHTML = '<p class="error">Network error while loading books.</p>';
     }
 }
 
 function renderBooks(books, showAdminTools) {
     booksContainer.innerHTML = '';
     if (books.length === 0) {
-        booksContainer.innerHTML = '<p>लाइब्रेरी में कोई किताब नहीं है।</p>';
+        booksContainer.innerHTML = '<p>No books found in the library.</p>';
         return;
     }
 
@@ -124,10 +124,10 @@ function renderBooks(books, showAdminTools) {
             <h4>${book.title}</h4>
             <p><strong>Author:</strong> ${book.author}</p>
             <p><strong>Category:</strong> ${book.category}</p>
-            <p><strong>स्थिति:</strong> <span class="status-label">${book.status === 'available' ? 'उपलब्ध' : 'इश्यू'}</span></p>
+            <p><strong>Status:</strong> <span class="status-label">${book.status === 'available' ? 'Available' : 'Issued'}</span></p>
             ${showAdminTools ? 
-                `<button data-id="${book.book_id}" class="btn-delete">हटाएँ</button>` : 
-                `<button data-id="${book.book_id}" class="btn-order" ${book.status !== 'available' ? 'disabled' : ''}>ऑर्डर करें</button>`
+                `<button data-id="${book.book_id}" class="btn-delete">Delete</button>` : 
+                `<button data-id="${book.book_id}" class="btn-order" ${book.status !== 'available' ? 'disabled' : ''}>Order</button>`
             }
         </div>
     `).join('');
@@ -152,7 +152,7 @@ function setupDeleteListeners() {
     booksContainer.addEventListener('click', async (e) => {
         if (e.target.classList.contains('btn-delete')) {
             const bookId = e.target.dataset.id;
-            if (!confirm(`क्या आप वाकई पुस्तक ID: ${bookId} हटाना चाहते हैं?`)) {
+            if (!confirm(`Are you sure you want to delete book ID: ${bookId}?`)) {
                 return;
             }
 
@@ -164,7 +164,7 @@ function setupDeleteListeners() {
                     loadBooks(true);
                 }
             } catch (error) {
-                alert('किताब हटाते समय नेटवर्क त्रुटि।');
+                alert('Network error while deleting book.');
             }
         }
     });
@@ -177,11 +177,11 @@ function setupIssueListeners() {
             const userId = localStorage.getItem('userId');
 
             if (!userId) {
-                alert('कृपया पहले लॉगिन करें!');
+                alert('Please log in first!');
                 return;
             }
 
-            if (!confirm('क्या आप वाकई यह किताब इश्यू करना चाहते हैं?')) {
+            if (!confirm('Are you sure you want to issue this book?')) {
                 return;
             }
 
@@ -202,7 +202,7 @@ function setupIssueListeners() {
                     }
                 }
             } catch (error) {
-                alert('किताब इश्यू करने में नेटवर्क त्रुटि।');
+                alert('Network error while issuing book.');
             }
         }
     });
@@ -219,13 +219,13 @@ async function loadReturnRequests() {
             returnRequestsList.innerHTML = `<p class="error">${data.message}</p>`;
         }
     } catch (error) {
-        returnRequestsList.innerHTML = '<p class="error">रिटर्न रिक्वेस्ट लोड करने में नेटवर्क त्रुटि।</p>';
+        returnRequestsList.innerHTML = '<p class="error">Network error while loading return requests.</p>';
     }
 }
 
 function renderReturnRequests(requests) {
     if (requests.length === 0) {
-        returnRequestsList.innerHTML = '<p>कोई लंबित रिटर्न रिक्वेस्ट नहीं है।</p>';
+        returnRequestsList.innerHTML = '<p>No pending return requests.</p>';
         return;
     }
 
@@ -242,7 +242,7 @@ function renderReturnRequests(requests) {
                 data-action="accept" 
                 class="btn-handle btn-accept" 
                 style="background-color: #28a745; color: white; padding: 8px; border: none; cursor: pointer; margin-right: 10px;">
-                स्वीकार करें
+                accept
             </button>
 
             <button 
@@ -251,7 +251,7 @@ function renderReturnRequests(requests) {
                 data-action="reject" 
                 class="btn-handle btn-reject"
                 style="background-color: #dc3545; color: white; padding: 8px; border: none; cursor: pointer;">
-                अस्वीकार करें
+                reject
             </button>
         </div>
     `).join('');
@@ -266,9 +266,9 @@ function setupReturnRequestListeners() {
             const issueId = e.target.dataset.issueId;
             const bookId = e.target.dataset.bookId;
             const action = e.target.dataset.action;
-            const actionText = action === 'accept' ? 'स्वीकार' : 'अस्वीकार';
+            const actionText = action === 'accept' ? 'Accept' : 'Reject';
 
-            if (!confirm(`क्या आप वाकई इस रिक्वेस्ट को ${actionText} करना चाहते हैं?`)) {
+            if (!confirm(`Are you sure you want to ${actionText} this request?`)) {
                 return;
             }
 
@@ -289,7 +289,7 @@ function setupReturnRequestListeners() {
                     }
                 }
             } catch (error) {
-                alert('रिटर्न रिक्वेस्ट हैंडल करने में नेटवर्क त्रुटि।');
+                alert('Network error while handling return request.');
             }
         }
     });
@@ -317,7 +317,7 @@ if (addBookForm) {
                 loadBooks(true);
             }
         } catch (error) {
-            alert('किताब जोड़ते समय नेटवर्क त्रुटि।');
+            alert('Network error while adding new book.');
         }
     });
 }

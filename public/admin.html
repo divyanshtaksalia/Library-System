@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>एडमिन डैशबोर्ड</title>
+    <title>Admin Dashboard</title>
     <link rel="stylesheet" href="style.css">
     <style>
         .admin-section {
@@ -17,31 +17,31 @@
 </head>
 <body onload="checkAuth('admin')">
     <div class="container" style="max-width: 1000px;">
-        <h1>👑 एडमिन पैनल</h1>
-        <p>लाइब्रेरी की सभी सेटिंग्स और ऑर्डर्स यहाँ मैनेज करें।</p>
+        <h1>👑 Admin Panel</h1>
+        <p>Manage all library settings and orders here.</p>
 
         <div class="admin-section">
-            <h3>📖 किताबें मैनेज करें</h3>
+            <h3>📖 Manage Books</h3>
             <form id="addBookForm" style="display: flex; gap: 10px; margin-bottom: 20px;">
-                <input type="text" id="newTitle" placeholder="शीर्षक" required style="flex: 3;">
-                <input type="text" id="newAuthor" placeholder="लेखक" required style="flex: 2;">
-                <input type="text" id="newCategory" placeholder="श्रेणी" required style="flex: 2;">
-                <button type="submit" style="flex: 1; margin-top: 0;">किताब जोड़ें</button>
+                <input type="text" id="newTitle" placeholder="Title" required style="flex: 3;">
+                <input type="text" id="newAuthor" placeholder="Author" required style="flex: 2;">
+                <input type="text" id="newCategory" placeholder="Category" required style="flex: 2;">
+                <button type="submit" style="flex: 1; margin-top: 0;">Add Book</button>
             </form>
             <div id="booksList"></div>
         </div>
 
         <div class="admin-section">
-            <h3>🔄 लंबित रिटर्न रिक्वेस्ट (Pending Return Requests)</h3>
+            <h3>🔄 Pending Return Requests</h3>
             <div id="returnRequestsList"></div>
         </div>
         <div class="admin-section">
-            <h3>👤 यूज़र मैनेज करें</h3>
+            <h3>👤 Manage Users</h3>
             <div id="usersList"></div>
         </div>
         
         <div style="margin-top: 30px;">
-            <button onclick="logout()">लॉगआउट</button>
+            <button onclick="logout()">Logout</button>
         </div>
     </div>
     <script src="auth.js"></script>

@@ -65,7 +65,7 @@ a:hover {
     margin-bottom: 15px;
     border-radius: 4px;
     text-align: left;
-    display: none; /* JavaScript इसे दिखाएगा */
+    display: none;
 }
 
 .message.success {

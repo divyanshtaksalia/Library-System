@@ -3,38 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>स्टूडेंट डैशबोर्ड</title>
+    <title>Student Dashboard</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body onload="checkAuth('student')">
     <div class="container" style="max-width: 800px;">
-        <h1>📚 वेलकम <span id="welcomeName">स्टूडेंट</span>!</h1>
-        <p>यह आपका लाइब्रेरी डैशबोर्ड है। यहाँ आप किताबें ढूँढ सकते हैं और अपनी मौजूदा ऑर्डर्स देख सकते हैं।</p>
+        <h1>📚 Welcome <span id="welcomeName">Student</span>!</h1>
+        <p>This is your library dashboard. Here you can search for books and view your current orders.</p>
 
         <div id="booksList" style="margin-top: 30px;">
-            <h2>किताबें ढूँढें</h2>
+            <h2>Search Books</h2>
             <div id="booksList"></div>
         </div>
         <div style="margin-top: 30px;">
-            <h2>📝 आपकी इश्यू की गई किताबें</h2>
+            <h2>📝 Your Issued Books</h2>
             <div id="myOrdersList"></div> 
         </div>
 
         <div style="margin-top: 30px;">
-            <button onclick="logout()">लॉगआउट</button>
+            <button onclick="logout()">Logout</button>
         </div>
     </div>
 
     <script src="auth.js"></script>
     <script>
-        // लॉगिन पर localStorage में स्टोर किया गया नाम दिखाएँ
-        document.getElementById('welcomeName').textContent = localStorage.getItem('username') || 'स्टूडेंट';
+        document.getElementById('welcomeName').textContent = localStorage.getItem('username') || 'Student';
     </script>
     <script src="books.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         if (checkAuth('student')) {
-            loadBooks(false); // Student को Admin टूल्स नहीं दिखेंगे
+            loadBooks(false); 
         }
     });
 </script>
@@ -42,10 +41,9 @@
     document.addEventListener('DOMContentLoaded', () => {
         if (checkAuth('student')) {
             loadBooks(false); 
-            loadMyOrders(); // <-- नया कॉल
+            loadMyOrders();
         }
     });
-    // ... (बाकी script)
 </script>
 </body>
 </html>
